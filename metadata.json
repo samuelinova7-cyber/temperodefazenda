@@ -1,0 +1,6 @@
+{
+  "name": "Tempero de Fazenda - Cardápio & Fornaria",
+  "description": "Cardápio completo e pedidos do Tempero de Fazenda Restaurante e Fornaria na Praia do Francês, Alagoas. Culinária Mineira, Chapas, Parmegianas e Fornaria de Pizzas Artesanais.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

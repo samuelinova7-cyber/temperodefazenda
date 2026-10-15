@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tempero de Fazenda – Restaurante & Fornaria | Praia do Francês</title>
+    <meta name="description" content="Cardápio completo do Tempero de Fazenda Restaurante e Fornaria na Praia do Francês, Alagoas. Culinária Mineira, Chapas, Parmegianas e Fornaria de Pizzas Artesanais." />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="restaurant.restaurant" />
+    <meta property="og:title" content="Tempero de Fazenda – Restaurante & Fornaria" />
+    <meta property="og:description" content="Sabor autêntico da comida mineira e fornaria de pizzas artesanais na Praia do Francês, Alagoas. Confira o cardápio e faça seu pedido." />
+    <meta property="og:site_name" content="Tempero de Fazenda" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tempero de Fazenda – Restaurante & Fornaria" />
+    <meta name="twitter:description" content="Cardápio completo: Entradas, Pratos Executivos, Parmegianas, Delícias Mineiras, Chapas e Pizzas Artesanais." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Schema.org Restaurant Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Tempero de Fazenda - Restaurante e Fornaria",
+      "image": "/src/assets/images/hero_tempero_fazenda_1792014341063.jpg",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Av. dos Corais, 284",
+        "addressLocality": "Marechal Deodoro",
+        "addressRegion": "AL",
+        "postalCode": "57160-000",
+        "addressCountry": "BR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -9.7183,
+        "longitude": -35.8398
+      },
+      "servesCuisine": ["Mineira", "Paulista", "Pizzaria", "Frutos do Mar"],
+      "priceRange": "R$ 40 - R$ 60",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.4",
+        "reviewCount": "604"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday"],
+          "opens": "11:00",
+          "closes": "18:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          "opens": "11:00",
+          "closes": "23:00"
+        }
+      ]
+    }
+    </script>
+  </head>
+  <body class="bg-[#faf8f5] text-[#2c2420] antialiased selection:bg-[#c45a2c]/20 selection:text-[#933714]">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
