@@ -7,12 +7,14 @@ interface HeaderProps {
   cartItemCount: number;
   cartTotal: number;
   onOpenCart: () => void;
+  onOpenMinigame: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   cartItemCount,
   cartTotal,
   onOpenCart,
+  onOpenMinigame,
 }) => {
   const [audioMuted, setAudioMuted] = useState(sounds.getIsMuted());
   return (
@@ -89,6 +91,21 @@ export const Header: React.FC<HeaderProps> = ({
             ) : (
               <Volume2 className="w-4 h-4 text-amber-600 animate-pulse" />
             )}
+          </button>
+
+          {/* Minigame Slot dos Sabores button */}
+          <button
+            type="button"
+            onClick={() => {
+              sounds.playClick();
+              onOpenMinigame();
+            }}
+            title="Minigame Slot dos Sabores"
+            aria-label="Minigame Slot dos Sabores - Ganhe uma recomendação"
+            className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-amber-500/30 text-[#8b3a1a] hover:text-[#5a230c] border border-amber-400/50 rounded-xl text-xs font-black tracking-tight shadow-xs transition-all hover:scale-103 cursor-pointer"
+          >
+            <span className="text-sm">🎰</span>
+            <span className="hidden md:inline font-['Outfit'] uppercase">Slot dos Sabores</span>
           </button>
 
           {/* Chamativo Comanda Button */}

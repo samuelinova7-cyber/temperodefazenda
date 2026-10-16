@@ -6,12 +6,14 @@ interface HeroBannerProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onSelectCategory: (categoryId: string) => void;
+  onOpenMinigame: () => void;
 }
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({
   searchQuery,
   onSearchChange,
   onSelectCategory,
+  onOpenMinigame,
 }) => {
   const status = getRestaurantStatus();
 
@@ -86,6 +88,36 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                   </button>
                 )}
               </div>
+            </div>
+
+            {/* Minigame Teaser Banner */}
+            <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2c1a12] via-[#3a2217] to-[#2c1a12] rounded-2xl border-2 border-[#e69c24]/70 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-[#e69c24]/20 border border-[#e69c24]/40 flex items-center justify-center text-2xl shrink-0">
+                  🎰
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] uppercase font-black tracking-wider text-[#e69c24] bg-[#e69c24]/20 px-2 py-0.5 rounded">
+                      Minigame Interativo
+                    </span>
+                    <span className="text-xs text-amber-200/80 font-bold hidden sm:inline">Descubra seu prato</span>
+                  </div>
+                  <h4 className="font-['Outfit'] font-bold text-white text-sm sm:text-base leading-tight mt-0.5">
+                    Slot dos Sabores da Roça
+                  </h4>
+                  <p className="text-[11px] text-[#cfc2b7] leading-tight">
+                    Gire a alavanca em 4 etapas e ganhe a recomendação perfeita!
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenMinigame}
+                className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-[#e69c24] to-[#b8740e] text-[#1b1310] font-['Outfit'] font-black text-xs uppercase tracking-wider rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap text-center"
+              >
+                Girar Alavanca 🎰
+              </button>
             </div>
 
             {/* Direct Quick Shortcuts */}

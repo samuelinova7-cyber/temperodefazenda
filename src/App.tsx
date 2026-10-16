@@ -13,6 +13,7 @@ import { RestaurantInfo } from './components/RestaurantInfo';
 import { Footer } from './components/Footer';
 import { MenuTopBanner } from './components/MenuTopBanner';
 import { InstagramReelsSection } from './components/InstagramReelsSection';
+import { SlotGameModal } from './components/SlotGameModal';
 import { categories, menuItems } from './data/menuData';
 import { MenuItem, CartItem, PortionOption } from './types/menu';
 import { formatBRL } from './utils/formatters';
@@ -25,6 +26,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSlotModalOpen, setIsSlotModalOpen] = useState(false);
   const [selectedDishForModal, setSelectedDishForModal] = useState<MenuItem | null>(null);
   const [viewMode, setViewMode] = useState<'rows' | 'grid'>('rows');
 
@@ -176,6 +178,7 @@ export default function App() {
         cartItemCount={cartItemCount}
         cartTotal={cartTotal}
         onOpenCart={() => setIsCartOpen(true)}
+        onOpenMinigame={() => setIsSlotModalOpen(true)}
       />
 
       {/* Main Hero & Search */}
@@ -183,6 +186,7 @@ export default function App() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onSelectCategory={handleSelectCategory}
+        onOpenMinigame={() => setIsSlotModalOpen(true)}
       />
 
       {/* Category Navigation Bar */}
@@ -377,8 +381,23 @@ export default function App() {
       {/* Notificações em Tempo Real do Google Reviews */}
       <GoogleReviewToast />
 
-      {/* Botão de WhatsApp Neon Flutuante + Botão de iFood com Vídeo que acompanha o scroll */}
-      <FloatingActions />
+      {/* Botão de WhatsApp Neon Flutuante + Botão de iFood com Vídeo que acompanha o scroll + Minigame */}
+      <FloatingActions onOpenMinigame={() => setIsSlotModalOpen(true)} />
+
+      {/* Minigame Slot dos Sabores Modal */}
+      <SlotGameModal
+        isOpen={isSlotModalOpen}
+        onClose={() => setIsSlotModalOpen(false)}
+        onAddToCart={(item) => {
+          const defaultPortion = item.portions && item.portions.length > 0 ? item.portions[0] : undefined;
+          const unitPrice = defaultPortion ? defaultPortion.price : (item.price || 0);
+          handleAddToCart(item, defaultPortion, {}, '', 1, unitPrice);
+          setIsCartOpen(true);
+        }}
+        onSelectDish={(item) => {
+          setSelectedDishForModal(item);
+        }}
+      />
 
       {/* Customization / Add Modal */}
       <DishModal

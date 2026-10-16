@@ -2,7 +2,11 @@ import React from 'react';
 import { MessageCircle, ShoppingBag, ExternalLink } from 'lucide-react';
 import { sounds } from '../utils/soundEffects';
 
-export const FloatingActions: React.FC = () => {
+interface FloatingActionsProps {
+  onOpenMinigame?: () => void;
+}
+
+export const FloatingActions: React.FC<FloatingActionsProps> = ({ onOpenMinigame }) => {
   const handleWhatsAppClick = () => {
     sounds.playClick();
     const url = `https://wa.me/5582999999999?text=${encodeURIComponent(
@@ -13,11 +17,34 @@ export const FloatingActions: React.FC = () => {
 
   const handleIfoodClick = () => {
     sounds.playClick();
-    window.open('https://www.ifood.com.br', '_blank');
+    window.open('https://www.ifood.com.br/delivery/marechal-deodoro-al/tempero-de-fazenda-restaurante-e-fornaria-praia-do-frances', '_blank');
   };
 
   return (
     <div className="fixed bottom-6 right-4 sm:right-6 z-40 flex flex-col items-end gap-3 pointer-events-auto">
+      {/* 0. Botão Slot dos Sabores (Minigame) */}
+      {onOpenMinigame && (
+        <button
+          type="button"
+          onClick={() => {
+            sounds.playClick();
+            onOpenMinigame();
+          }}
+          aria-label="Abrir Minigame Slot dos Sabores"
+          className="group relative flex items-center gap-2 px-3.5 py-2.5 bg-gradient-to-r from-amber-600 via-amber-500 to-yellow-500 text-[#1b1310] font-['Outfit'] font-black rounded-full shadow-[0_0_15px_rgba(230,156,36,0.5)] border-2 border-amber-300 hover:scale-108 active:scale-95 transition-all duration-300 cursor-pointer"
+        >
+          <span className="text-lg animate-bounce">🎰</span>
+          <div className="text-left hidden sm:block">
+            <span className="block text-[9px] uppercase font-black tracking-widest text-[#3d271d]">
+              Minigame
+            </span>
+            <span className="block text-xs font-black tracking-tight text-[#1b1310] leading-none">
+              Slot Sabores
+            </span>
+          </div>
+        </button>
+      )}
+
       {/* 1. Botão iFood Flutuante com Animação em Vídeo */}
       <button
         type="button"

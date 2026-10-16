@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot dos Sabores — Tempero de Fazenda</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==========================================
+           ESTILOS GERAIS & TEMA RÚSTICO MINEIRO
+           ========================================== */
+        :root {
+            --primary-color: #8b0000;   /* Vermelho Rústico */
+            --accent-color: #e69c24;    /* Dourado / Amarelo Caipira */
+            --bg-dark: #1b1310;         /* Madeira Escura */
+            --bg-card: #2c1e18;         /* Painel Rústico */
+            --text-light: #f5ebd9;      /* Creme */
+            --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            --font-display: 'Outfit', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px;
+            background-image: radial-gradient(circle at 50% 20%, rgba(230, 156, 36, 0.15) 0%, transparent 60%);
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 640px;
+            max-height: 92vh;
+            background: radial-gradient(circle, #3d261c 0%, #1b1310 100%);
+            border: 3px solid var(--accent-color);
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.85), 0 0 25px rgba(230, 156, 36, 0.2);
+            padding: 24px 20px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Ocultar telas inativas */
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .screen.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ==========================================
+           1. TELA INICIAL (START)
+           ========================================== */
+        .brand-logo-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 18px auto;
+        }
+
+        .brand-logo-glow {
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(230, 156, 36, 0.7) 0%, transparent 70%);
+            animation: pulseGlow 2.5s ease-in-out infinite;
+        }
+
+        .brand-logo {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-family: var(--font-display);
+            font-size: 1.85rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        p.subtitle {
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            color: #d1be9d;
+            line-height: 1.4;
+            max-width: 340px;
+        }
+
+        .btn-main {
+            background: linear-gradient(180deg, #e69c24 0%, #b8740e 100%);
+            color: #1b1310;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #7a4a06, 0 10px 25px rgba(230, 156, 36, 0.4);
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-main:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #7a4a06, 0 5px 12px rgba(0,0,0,0.5);
+        }
+
+        /* ==========================================
+           TELA DE CARREGAMENTO
+           ========================================== */
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(230, 156, 36, 0.2);
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 18px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--accent-color);
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        /* ==========================================
+           2. MÁQUINA DE SABORES (SLOT MACHINE)
+           ========================================== */
+        .step-indicator {
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 180px;
+            background-color: #000;
+            border-radius: 14px;
+            border: 2px solid var(--accent-color);
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slot-machine {
+            background-color: var(--bg-card);
+            border: 3px solid var(--accent-color);
+            border-radius: 14px;
+            padding: 16px 12px;
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 15px rgba(0,0,0,0.4);
+            gap: 8px;
+        }
+
+        .reel {
+            flex: 1;
+            height: 95px;
+            background: linear-gradient(180deg, #130c09 0%, #20130e 50%, #130c09 100%);
+            border: 2px solid #52372a;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.9);
+        }
+
+        .reel-content {
+            display: inline-block;
+            transition: transform 0.1s ease;
+        }
+
+        .reel.spinning .reel-content {
+            animation: reelSpin 0.15s linear infinite;
+        }
+
+        @keyframes reelSpin {
+            0% { transform: translateY(-120%); opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { transform: translateY(120%); opacity: 0.4; }
+        }
+
+        .lever-btn {
+            background: linear-gradient(180deg, #a31111 0%, #680505 100%);
+            color: var(--text-light);
+            border: 2px solid var(--accent-color);
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 800;
+            padding: 15px 32px;
+            border-radius: 35px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #3a0000, 0 8px 20px rgba(0,0,0,0.6);
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .lever-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #3a0000, 0 4px 10px rgba(0,0,0,0.6);
+        }
+
+        .lever-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ==========================================
+           4. RESULTADO FINAL & AÇÕES
+           ========================================== */
+        .dish-card {
+            background-color: var(--bg-card);
+            border: 2px solid var(--accent-color);
+            border-radius: 14px;
+            padding: 16px;
+            width: 100%;
+            margin-bottom: 16px;
+            text-align: left;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+        }
+
+        .dish-badge {
+            display: inline-block;
+            background: rgba(230, 156, 36, 0.2);
+            color: var(--accent-color);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .dish-title {
+            color: var(--accent-color);
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .dish-desc {
+            font-size: 0.88rem;
+            color: #d1be9d;
+            margin-bottom: 10px;
+            line-height: 1.35;
+        }
+
+        .dish-price {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #f7d488;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 700;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: transform 0.15s ease, filter 0.15s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .btn-order-site {
+            background: linear-gradient(180deg, #e69c24 0%, #b8740e 100%);
+            color: #1b1310;
+        }
+
+        .btn-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .btn-google { background-color: #4285F4; }
+        .btn-ifood { background-color: #EA1D2C; }
+        .btn-restart {
+            background-color: transparent;
+            border: 1px solid #7a5843;
+            color: #d1be9d;
+            padding: 8px;
+            font-size: 0.85rem;
+        }
+        .btn-restart:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+
+        <!-- 1. TELA INICIAL (START) -->
+        <div id="screen-start" class="screen active">
+            <div class="brand-logo-container">
+                <div class="brand-logo-glow"></div>
+                <img src="https://res.cloudinary.com/hd1sahto/image/upload/v1792018297/WhatsApp_Image_2026-10-14_at_7.31.56_PM.jpg" alt="Tempero de Fazenda" class="brand-logo" onerror="this.src=''; this.innerText='🍲'">
+            </div>
+            <h1>Slot dos Sabores</h1>
+            <p class="subtitle">Descubra o prato perfeito do Tempero de Fazenda com a nossa máquina da roça!</p>
+            <button class="btn-main" onclick="startGame()">
+                <span>🎰</span> START
+            </button>
+        </div>
+
+        <!-- TELA DE CARREGAMENTO -->
+        <div id="screen-loading" class="screen">
+            <div class="spinner"></div>
+            <p class="loading-text">Preparando os temperos de Minas...</p>
+        </div>
+
+        <!-- 2. MÁQUINA DE SABORES (SLOT MACHINE) -->
+        <div id="screen-slot" class="screen">
+            <div id="step-indicator" class="step-indicator">Etapa 1 de 4: Escolhendo o Estilo</div>
+
+            <!-- Vídeo de Animação para cada etapa -->
+            <div class="video-container">
+                <video id="step-video" autoplay loop muted playsinline>
+                    <source id="video-source" src="https://res.cloudinary.com/hd1sahto/video/upload/v1792022902/Logo_animation_for_restaurant_20261014210746.mp4" type="video/mp4">
+                    O seu navegador não suporta vídeos HTML5.
+                </video>
+            </div>
+
+            <!-- Rolos do Caça-Níquel -->
+            <div class="slot-machine">
+                <div class="reel" id="reel-1"><span class="reel-content">❓</span></div>
+                <div class="reel" id="reel-2"><span class="reel-content">❓</span></div>
+                <div class="reel" id="reel-3"><span class="reel-content">❓</span></div>
+            </div>
+
+            <button id="lever-btn" class="lever-btn" onclick="spinSlot()">PUXAR ALAVANCA 🎰</button>
+        </div>
+
+        <!-- 4. RESULTADO FINAL -->
+        <div id="screen-result" class="screen">
+            <h2 style="color: var(--accent-color); font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 4px;">🎉 Combinação Perfeita!</h2>
+            <p style="font-size: 0.88rem; margin-bottom: 14px; color: #d1be9d;">O seu prato ideal no Tempero de Fazenda é:</p>
+
+            <div class="dish-card">
+                <div id="dish-badge" class="dish-badge">Destaque do Cardápio</div>
+                <h3 id="dish-title" class="dish-title">Picanha da Chapa Mineira</h3>
+                <p id="dish-desc" class="dish-desc">Acompanha arroz branco, feijão tropeiro mineiro, vinagrete caseiro e mandioca cozida puxada na manteiga de garrafa.</p>
+                <div id="dish-price" class="dish-price">A partir de R$ 130,00</div>
+            </div>
+
+            <div class="action-buttons">
+                <!-- Pedir no próprio restaurante -->
+                <a id="link-site" href="/" class="btn-action btn-order-site">
+                    🍽️ Ver no Cardápio Completo
+                </a>
+                <a id="link-ifood" href="https://www.ifood.com.br/delivery/marechal-deodoro-al/tempero-de-fazenda-restaurante-e-fornaria-praia-do-frances" target="_blank" rel="noopener noreferrer" class="btn-action btn-ifood">
+                    🛵 Pedir pelo iFood
+                </a>
+                <a id="link-instagram" href="https://www.instagram.com/temperodefazenda" target="_blank" rel="noopener noreferrer" class="btn-action btn-instagram">
+                    📸 Seguir no Instagram
+                </a>
+                <a id="link-google" href="https://maps.app.goo.gl/9uE4D2B6aP6Zg8b69" target="_blank" rel="noopener noreferrer" class="btn-action btn-google">
+                    ⭐ Avaliar no Google
+                </a>
+                <button onclick="startGame()" class="btn-action btn-restart">
+                    🔄 Girar a Alavanca Novamente
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ==========================================
+           ÁUDIO NATIVO VIA WEB AUDIO API (SEM ARQUIVOS)
+           ========================================== */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playClickSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.04);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.04);
+        }
+
+        function playClunkSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(320, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.08);
+        }
+
+        function playFanfare() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const notes = [523.25, 659.25, 783.99, 1046.5];
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const start = audioCtx.currentTime + i * 0.1;
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, start);
+                gain.gain.setValueAtTime(0.12, start);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(start);
+                osc.stop(start + 0.3);
+            });
+        }
+
+        /* ==========================================
+           CONFIGURAÇÃO DAS 4 ETAPAS COM VÍDEOS REAIS
+           ========================================== */
+        const steps = [
+            {
+                title: "Etapa 1 de 4: Escolhendo o Prato Principal",
+                video: "https://res.cloudinary.com/hd1sahto/video/upload/v1792022902/Logo_animation_for_restaurant_20261014210746.mp4",
+                symbols: ["🥩", "🍗", "🐟", "🍕"]
+            },
+            {
+                title: "Etapa 2 de 4: Acompanhamento Caipira",
+                video: "https://res.cloudinary.com/hd1sahto/video/upload/v1792023882/SnapInsta.to_AQNgfDP0MPYk4o2r05oNYDike4Vok1ne8gT2xJrPM3AjwFiGjA8bJN0iz0F8g7N3_RaJZ6rDSY2D2Sle1vnpbWq4KehTPXLZJ6Z8QpQ.mp4",
+                symbols: ["🫘", "🥬", "🥔", "🍚"]
+            },
+            {
+                title: "Etapa 3 de 4: Toque Especial do Chef",
+                video: "https://res.cloudinary.com/hd1sahto/video/upload/v1792023892/SnapInsta.to_AQNLaMQxwl_rGKBaN9_AD-9mmQJOsvR7gN2-s39x_E5OPvL0rt2lPEjbDP325QYpUtmi1qbNDakU3N3MrekzzBTycbecPvdqloeZrfY.mp4",
+                symbols: ["🧀", "🥓", "🌶️", "🧈"]
+            },
+            {
+                title: "Etapa 4 de 4: Finalizando a Recomendação",
+                video: "https://res.cloudinary.com/hd1sahto/video/upload/v1792023908/SnapInsta.to_AQPRRypt1WqUY1QuB-mTAJF8FaS8frZ5owNVvrmYzJ7BsZeHqT6ZXPmUSWVnnVwN6flD0LfFak5TashVXAjk_VIQV2gPeuLym9_V2so.mp4",
+                symbols: ["🍺", "🍹", "🥤", "☕"]
+            }
+        ];
+
+        // Pratos Reais do Cardápio Tempero de Fazenda
+        const menuDatabase = [
+            {
+                badge: "Campeão de Vendas",
+                title: "Picanha da Chapa",
+                desc: "Arroz soltinho, feijão tropeiro mineiro, vinagrete e mandioca cozida macia na manteiga de garrafa.",
+                price: "R$ 130,00 (Para 2 Pessoas)"
+            },
+            {
+                badge: "Tradição Mineira",
+                title: "Delícia Mineira Caipira",
+                desc: "Arroz branco, feijão tropeiro mineiro autêntico, costelinha suína dourada e mandioca frita crocante.",
+                price: "Individual: R$ 38,00 | Para 2: R$ 71,00"
+            },
+            {
+                badge: "Mais Pedido da Fornaria",
+                title: "Filé Mignon à Parmegiana",
+                desc: "Filé mignon empanado artesanal, molho de tomate pelati caseiro, muçarela derretida, arroz e purê de batata.",
+                price: "Individual: R$ 72,00 | Para 2: R$ 136,00"
+            },
+            {
+                badge: "Especialidade do Mar",
+                title: "Chiclete de Camarão",
+                desc: "Camarões selecionados flambados, envolvidos em molho cremoso de queijos e gratinados no forno à lenha.",
+                price: "Individual: R$ 58,00 | Para 2: R$ 110,00"
+            },
+            {
+                badge: "Almoço Executivo",
+                title: "Executivo \"Trembão\"",
+                desc: "Arroz, purê de batata caseiro cremoso e filé de frango crocante à parmegiana com bastante queijo.",
+                price: "Apenas R$ 36,00"
+            },
+            {
+                badge: "Fornaria Artesanal",
+                title: "Pizza Mineirinha Especial",
+                desc: "Massa de longa fermentação, molho artesanal, lombo desfiado, queijo minas, bacon crocante e catupiry legítimo.",
+                price: "Média (6 fatias): R$ 56,00 | Grande: R$ 68,00"
+            }
+        ];
+
+        let currentStep = 0;
+        let spinInterval = null;
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function startGame() {
+            playClickSound();
+            showScreen('screen-loading');
+            setTimeout(() => {
+                currentStep = 0;
+                setupStep(currentStep);
+                showScreen('screen-slot');
+            }, 1200);
+        }
+
+        function setupStep(stepIndex) {
+            const step = steps[stepIndex];
+            document.getElementById('step-indicator').innerText = step.title;
+            
+            // Atualizar Vídeo
+            const videoSource = document.getElementById('video-source');
+            videoSource.src = step.video;
+            const videoPlayer = document.getElementById('step-video');
+            videoPlayer.load();
+            videoPlayer.play().catch(() => {});
+
+            // Resetar rolos
+            document.querySelectorAll('.reel-content').forEach(r => r.innerText = '❓');
+            document.getElementById('lever-btn').disabled = false;
+        }
+
+        function spinSlot() {
+            playClickSound();
+            const btn = document.getElementById('lever-btn');
+            btn.disabled = true;
+
+            const reels = [
+                document.getElementById('reel-1'),
+                document.getElementById('reel-2'),
+                document.getElementById('reel-3')
+            ];
+
+            // Iniciar animação visual
+            reels.forEach(r => r.classList.add('spinning'));
+
+            // Parar rolos progressivamente
+            setTimeout(() => {
+                reels.forEach((reel, index) => {
+                    setTimeout(() => {
+                        reel.classList.remove('spinning');
+                        playClunkSound();
+                        const randomSymbol = steps[currentStep].symbols[Math.floor(Math.random() * steps[currentStep].symbols.length)];
+                        reel.querySelector('.reel-content').innerText = randomSymbol;
+
+                        // Se for o último rolo
+                        if (index === 2) {
+                            setTimeout(nextStep, 900);
+                        }
+                    }, index * 350);
+                });
+            }, 800);
+        }
+
+        function nextStep() {
+            currentStep++;
+            if (currentStep < steps.length) {
+                setupStep(currentStep);
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            playFanfare();
+            const randomDish = menuDatabase[Math.floor(Math.random() * menuDatabase.length)];
+            document.getElementById('dish-badge').innerText = randomDish.badge;
+            document.getElementById('dish-title').innerText = randomDish.title;
+            document.getElementById('dish-desc').innerText = randomDish.desc;
+            document.getElementById('dish-price').innerText = randomDish.price;
+
+            showScreen('screen-result');
+        }
+    </script>
+</body>
+</html>
